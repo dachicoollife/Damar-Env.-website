@@ -1,3 +1,15 @@
+// when the page is entered via a view transition, the cross-fade is already
+// the entrance animation — show in-viewport reveal content instantly so the
+// pop-in doesn't play during the fade and then again after it (double blink)
+window.addEventListener('pagereveal', function (e) {
+  if (!e.viewTransition) return;
+  document.querySelectorAll('.reveal').forEach(function (el) {
+    if (el.getBoundingClientRect().top < window.innerHeight) {
+      el.classList.add('instant', 'is-visible');
+    }
+  });
+});
+
 document.addEventListener('DOMContentLoaded', function () {
   var toggle = document.querySelector('.nav-toggle');
   if (toggle) {

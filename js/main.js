@@ -184,6 +184,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     placeInstantly(activeLink);
 
+    // re-measure once web fonts finish loading — text metrics change and the
+    // links shift, leaving the pill at stale fallback-font coordinates
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () {
+        var current = mainNav.querySelector('a.pill-target') || activeLink;
+        placeInstantly(current);
+      });
+    }
+
     navLinks.forEach(function (link) {
       link.addEventListener('mouseenter', function () {
         movePill(link);
@@ -210,6 +219,25 @@ document.addEventListener('DOMContentLoaded', function () {
       var current = mainNav.querySelector('a.pill-target') || activeLink;
       placeInstantly(current);
     });
+
+    var contactNavLink = navLinks.filter(function (l) {
+      return /contact/i.test(l.getAttribute('href') || '');
+    })[0];
+
+    if (contactNavLink) {
+      document.querySelectorAll('a.btn[href*="contact"]').forEach(function (btn) {
+        if (mainNav.contains(btn)) return;
+        btn.addEventListener('click', function (e) {
+          if (contactNavLink.classList.contains('active')) return;
+          var href = btn.getAttribute('href');
+          if (!href) return;
+          e.preventDefault();
+          movePill(contactNavLink);
+          setTarget(contactNavLink);
+          setTimeout(function () { window.location.href = href; }, 240);
+        });
+      });
+    }
   }
 
   var revealEls = document.querySelectorAll('.reveal');

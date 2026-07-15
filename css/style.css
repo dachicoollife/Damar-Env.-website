@@ -581,26 +581,9 @@ body.nav-open .nav-overlay li:nth-child(4) a { transition-delay: 0.26s; }
 .signup-row {
   display: flex;
   gap: 0.7rem;
-  flex-wrap: wrap;
   justify-content: center;
   max-width: 520px;
   margin: 0 auto;
-}
-
-.signup-row input[type="email"] {
-  flex: 1 1 240px;
-  padding: 1rem 1.4rem;
-  border-radius: 999px;
-  border: 1px solid var(--hairline);
-  background: var(--white);
-  font-family: inherit;
-  font-size: 0.92rem;
-}
-
-.signup-row input[type="email"]:focus {
-  outline: none;
-  border-color: var(--green-accent);
-  box-shadow: 0 0 0 4px var(--green-accent-soft);
 }
 
 /* ================= PAGE BANNER (services / regulatory) ================= */

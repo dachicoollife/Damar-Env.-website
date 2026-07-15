@@ -196,6 +196,12 @@ h1, h2, h3, h4 {
 
 .brand svg { flex-shrink: 0; }
 
+.brand-logo {
+  height: 34px;
+  width: auto;
+  flex-shrink: 0;
+}
+
 .brand-text .name {
   font-family: var(--font-display);
   font-weight: 600;
@@ -717,8 +723,10 @@ body.nav-open .nav-overlay li:nth-child(4) a { transition-delay: 0.26s; }
 }
 
 /* ================= REGULATORY RESOURCES ================= */
-.reg-section { padding: var(--section-py) 0; }
+.reg-section { padding: clamp(1.5rem, 3vw, 2.5rem) 0; }
 .reg-section.tight { padding-top: 0; }
+.reg-section:first-of-type { padding-top: clamp(2.5rem, 5vw, 4rem); }
+.reg-section:last-of-type { padding-bottom: clamp(3.5rem, 7vw, 5.5rem); }
 
 .reg-section > .container > h2 {
   color: var(--green-dark);

@@ -40,6 +40,68 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  var mainNav = document.querySelector('.main-nav');
+  if (mainNav) {
+    var pill = document.createElement('li');
+    pill.className = 'nav-pill no-anim';
+    pill.setAttribute('aria-hidden', 'true');
+    mainNav.appendChild(pill);
+
+    var navLinks = Array.prototype.slice.call(mainNav.querySelectorAll('a'));
+    var activeLink = mainNav.querySelector('a.active') || navLinks[0];
+
+    var movePill = function (el) {
+      if (!el) return;
+      var navBox = mainNav.getBoundingClientRect();
+      var elBox = el.getBoundingClientRect();
+      pill.style.width = elBox.width + 'px';
+      pill.style.height = elBox.height + 'px';
+      pill.style.transform = 'translate(' + (elBox.left - navBox.left) + 'px, ' + (elBox.top - navBox.top) + 'px)';
+    };
+
+    var setTarget = function (el) {
+      navLinks.forEach(function (l) { l.classList.toggle('pill-target', l === el); });
+    };
+
+    var placeInstantly = function (el) {
+      pill.classList.add('no-anim');
+      movePill(el);
+      setTarget(el);
+      // force reflow so the next transition re-enables cleanly
+      void pill.offsetWidth;
+      pill.classList.remove('no-anim');
+    };
+
+    placeInstantly(activeLink);
+
+    navLinks.forEach(function (link) {
+      link.addEventListener('mouseenter', function () {
+        movePill(link);
+        setTarget(link);
+      });
+
+      link.addEventListener('click', function (e) {
+        if (link.classList.contains('active')) return;
+        var href = link.getAttribute('href');
+        if (!href) return;
+        e.preventDefault();
+        movePill(link);
+        setTarget(link);
+        setTimeout(function () { window.location.href = href; }, 240);
+      });
+    });
+
+    mainNav.addEventListener('mouseleave', function () {
+      movePill(activeLink);
+      setTarget(activeLink);
+    });
+
+    window.addEventListener('resize', function () {
+      var current = mainNav.querySelector('a.pill-target') || activeLink;
+      placeInstantly(current);
+    });
+  }
+
   var revealEls = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window && revealEls.length) {
     var observer = new IntersectionObserver(function (entries) {

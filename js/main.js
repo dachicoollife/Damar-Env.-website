@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var overlaySearchResults = document.createElement('div');
     overlaySearchResults.className = 'overlay-search-results';
     overlaySearchInput.parentElement.insertAdjacentElement('afterend', overlaySearchResults);
-    setupLiveSearch(overlaySearchInput, overlaySearchResults, 3);
+    setupLiveSearch(overlaySearchInput, overlaySearchResults, 2);
   }
 
   if (searchBtn && siteNav) {

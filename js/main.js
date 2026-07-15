@@ -1,8 +1,21 @@
 // when the page is entered via a view transition, the cross-fade is already
 // the entrance animation — show in-viewport reveal content instantly so the
 // pop-in doesn't play during the fade and then again after it (double blink)
+// mobile keeps the classic page load — cancel the transition on both the
+// outgoing (pageswap) and incoming (pagereveal) side. This must live in JS:
+// wrapping @view-transition in @media silently kills it in some browsers.
+function skipMobileTransition(e) {
+  if (e.viewTransition && window.innerWidth <= 860) {
+    e.viewTransition.skipTransition();
+    return true;
+  }
+  return false;
+}
+
+window.addEventListener('pageswap', skipMobileTransition);
+
 window.addEventListener('pagereveal', function (e) {
-  if (!e.viewTransition) return;
+  if (!e.viewTransition || skipMobileTransition(e)) return;
   document.querySelectorAll('.reveal').forEach(function (el) {
     if (el.getBoundingClientRect().top < window.innerHeight) {
       el.classList.add('instant', 'is-visible');

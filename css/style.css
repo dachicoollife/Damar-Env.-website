@@ -25,9 +25,12 @@
   --section-py: clamp(4.5rem, 9vw, 8rem);
 }
 
-/* smooth cross-fade between pages instead of a hard reload flash
+/* smooth cross-fade between pages instead of a hard reload flash —
+   desktop only; mobile keeps the classic load with its reveal pop-ins
    (progressive enhancement — unsupported browsers get normal loads) */
-@view-transition { navigation: auto; }
+@media (min-width: 861px) {
+  @view-transition { navigation: auto; }
+}
 
 * { box-sizing: border-box; }
 

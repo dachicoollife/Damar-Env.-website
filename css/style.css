@@ -193,6 +193,102 @@ h1, h2, h3, h4 {
   transition-delay: 0.2s;
 }
 
+/* live search dropdown (desktop pill) */
+.nav-search-results {
+  position: absolute;
+  top: calc(100% + 0.7rem);
+  left: 0;
+  right: 0;
+  z-index: 5;
+  background: rgba(250, 249, 245, 0.94);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid var(--hairline);
+  border-radius: 1.4rem;
+  box-shadow: 0 30px 60px -24px rgba(18, 26, 21, 0.35);
+  padding: 0.4rem;
+  transform-origin: top center;
+  transform: translateY(-8px) scale(0.98);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
+}
+
+.nav-search-results.is-open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+
+.nav-search-result-item,
+.nav-search-view-all {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  border-radius: 0.9rem;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.3s var(--ease);
+}
+
+.nav-search-result-item:hover, .nav-search-result-item:focus-visible,
+.nav-search-view-all:hover, .nav-search-view-all:focus-visible {
+  background: rgba(18, 26, 21, 0.05);
+}
+
+.nav-search-result-item { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+
+.nav-search-result-tag {
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--green-dark);
+}
+
+.nav-search-result-title {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.nav-search-view-all {
+  justify-content: space-between;
+  margin-top: 0.15rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--green-dark);
+}
+
+.nav-search-view-all svg { flex-shrink: 0; }
+
+.nav-search-empty {
+  padding: 0.9rem;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+/* live search dropdown (mobile overlay) */
+.overlay-search-results {
+  width: min(320px, 82vw);
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  margin-bottom: 0;
+  transition: max-height 0.4s var(--ease), opacity 0.3s var(--ease), margin-bottom 0.4s var(--ease);
+}
+
+.overlay-search-results.is-open {
+  max-height: 50vh;
+  overflow-y: auto;
+  opacity: 1;
+  margin-bottom: 1.6rem;
+}
+
 .brand {
   display: flex;
   align-items: center;

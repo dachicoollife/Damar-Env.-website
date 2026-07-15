@@ -49,21 +49,103 @@ document.addEventListener('DOMContentLoaded', function () {
     window.location.href = searchPrefix + 'search-results/index.html?q=' + encodeURIComponent(q);
   }
 
-  if (searchInput) {
-    searchInput.addEventListener('keydown', function (e) {
+  function setupLiveSearch(input, resultsEl, limit) {
+    if (!input || !resultsEl) return;
+    var core = window.SearchCore;
+    var timer = null;
+
+    function close() {
+      resultsEl.classList.remove('is-open');
+    }
+
+    function renderMatches(query) {
+      var q = query.trim();
+      if (!q || !core) { resultsEl.innerHTML = ''; close(); return; }
+
+      var matches = core.match(q);
+      var terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+      var top = matches.slice(0, limit);
+
+      var rows = top.map(function (m) {
+        var item = m.item;
+        return '<a class="nav-search-result-item" href="' + item.url + '" target="_blank" rel="noopener">' +
+          '<span class="nav-search-result-tag">' + core.escapeHtml(item.category) + ' &middot; ' + core.escapeHtml(item.jurisdiction) + '</span>' +
+          '<span class="nav-search-result-title">' + core.highlight(item.title, terms) + '</span>' +
+        '</a>';
+      }).join('');
+
+      if (!matches.length) {
+        rows = '<div class="nav-search-empty">No matches for &ldquo;' + core.escapeHtml(q) + '&rdquo;</div>';
+      }
+
+      resultsEl.innerHTML = rows +
+        '<button type="button" class="nav-search-view-all">View all ' + (matches.length ? matches.length + ' ' : '') + 'results' +
+        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg></button>';
+
+      var viewAllBtn = resultsEl.querySelector('.nav-search-view-all');
+      if (viewAllBtn) {
+        viewAllBtn.addEventListener('click', function () { goToSearch(q); });
+      }
+
+      resultsEl.classList.add('is-open');
+    }
+
+    input.addEventListener('input', function () {
+      clearTimeout(timer);
+      var value = input.value;
+      timer = setTimeout(function () { renderMatches(value); }, 150);
+    });
+
+    input.addEventListener('focus', function () {
+      if (input.value.trim()) renderMatches(input.value);
+    });
+
+    input.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') {
         e.preventDefault();
-        goToSearch(searchInput.value);
+        clearTimeout(timer);
+        close();
+        goToSearch(input.value);
+      } else if (e.key === 'Escape') {
+        close();
       }
     });
+
+    input._resetLiveSearch = function () {
+      clearTimeout(timer);
+      input.value = '';
+      resultsEl.innerHTML = '';
+      close();
+    };
+  }
+
+  if (searchInput) {
+    var navSearchResults = document.createElement('div');
+    navSearchResults.className = 'nav-search-results';
+    searchInput.parentElement.appendChild(navSearchResults);
+    setupLiveSearch(searchInput, navSearchResults, 5);
   }
 
   var overlaySearchInput = document.querySelector('.overlay-search-input');
   if (overlaySearchInput) {
-    overlaySearchInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        goToSearch(overlaySearchInput.value);
+    var overlaySearchResults = document.createElement('div');
+    overlaySearchResults.className = 'overlay-search-results';
+    overlaySearchInput.parentElement.insertAdjacentElement('afterend', overlaySearchResults);
+    setupLiveSearch(overlaySearchInput, overlaySearchResults, 3);
+  }
+
+  if (searchBtn && siteNav) {
+    searchBtn.addEventListener('click', function () {
+      if (!siteNav.classList.contains('search-active') && searchInput && searchInput._resetLiveSearch) {
+        searchInput._resetLiveSearch();
+      }
+    });
+  }
+
+  if (toggle) {
+    toggle.addEventListener('click', function () {
+      if (!document.body.classList.contains('nav-open') && overlaySearchInput && overlaySearchInput._resetLiveSearch) {
+        overlaySearchInput._resetLiveSearch();
       }
     });
   }

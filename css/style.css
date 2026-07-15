@@ -589,7 +589,6 @@ body.nav-open .nav-overlay li:nth-child(4) a { transition-delay: 0.26s; }
   transition: opacity 1s var(--ease-soft), transform 1s var(--ease-soft), filter 1s var(--ease-soft);
 }
 .reveal.is-visible { opacity: 1; transform: none; filter: blur(0); }
-.reveal.instant { transition: none; }
 .reveal.d1 { transition-delay: 0.08s; }
 .reveal.d2 { transition-delay: 0.16s; }
 .reveal.d3 { transition-delay: 0.24s; }

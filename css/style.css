@@ -1149,6 +1149,19 @@ body.nav-open .nav-overlay-search { transform: translateY(0); opacity: 1; transi
 
 .field textarea { min-height: 130px; resize: vertical; }
 
+.btn:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; transform: none; }
+.btn:disabled .icon-circle { transform: none; }
+
+.form-status {
+  min-height: 1.3em;
+  margin: 1rem 0 0;
+  font-size: 0.86rem;
+  transition: color 0.3s;
+}
+
+.form-status.success { color: var(--green-dark); }
+.form-status.error { color: #b3261e; }
+
 .contact-info-col .bezel { height: 100%; }
 .contact-info-col .bezel-inner {
   height: 100%;

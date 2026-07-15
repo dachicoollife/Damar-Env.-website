@@ -57,35 +57,36 @@
   <div class="container contact-form-col reveal">
     <div class="eyebrow">Say Hello</div>
     <h1>Contact Us</h1>
-    <form onsubmit="alert('Thank You for Contacting Us!'); return false;">
+    <form id="contactForm">
       <div class="form-row">
         <div class="field">
           <label>First Name *</label>
-          <input type="text" required>
+          <input type="text" name="firstName" required>
         </div>
         <div class="field">
           <label>Last Name *</label>
-          <input type="text" required>
+          <input type="text" name="lastName" required>
         </div>
       </div>
       <div class="field">
         <label>Email *</label>
-        <input type="email" required>
+        <input type="email" name="email" required>
       </div>
       <div class="field">
         <label>Subject</label>
-        <input type="text">
+        <input type="text" name="subject">
       </div>
       <div class="field">
         <label>Message</label>
-        <textarea></textarea>
+        <textarea name="message"></textarea>
       </div>
       <button type="submit" class="btn">
-        Send Message
+        <span class="btn-label">Send Message</span>
         <span class="icon-circle">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg>
         </span>
       </button>
+      <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
     </form>
   </div>
   <div class="container contact-info-col reveal d1">
@@ -112,6 +113,7 @@
 
 <script src="../js/search-data.js"></script>
 <script src="../js/search-core.js"></script>
+<script src="../js/contact-form.js"></script>
 <script src="../js/main.js"></script>
 </body>
 </html>

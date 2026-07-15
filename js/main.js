@@ -40,6 +40,34 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  var mainNavFirstLink = document.querySelector('.main-nav a');
+  var searchPrefix = mainNavFirstLink ? mainNavFirstLink.getAttribute('href').replace(/index\.html$/, '') : '';
+
+  function goToSearch(query) {
+    var q = (query || '').trim();
+    if (!q) return;
+    window.location.href = searchPrefix + 'search-results/index.html?q=' + encodeURIComponent(q);
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        goToSearch(searchInput.value);
+      }
+    });
+  }
+
+  var overlaySearchInput = document.querySelector('.overlay-search-input');
+  if (overlaySearchInput) {
+    overlaySearchInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        goToSearch(overlaySearchInput.value);
+      }
+    });
+  }
+
   var mainNav = document.querySelector('.main-nav');
   if (mainNav) {
     var pill = document.createElement('li');

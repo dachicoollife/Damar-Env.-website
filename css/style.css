@@ -653,8 +653,11 @@ body.nav-open .nav-overlay li:nth-child(4) a { transition-delay: 0.26s; }
 /* photo-bg cascade sections */
 .photo-cascade {
   position: relative;
-  padding: clamp(5rem, 9vw, 7rem) 0;
+  padding: clamp(1.25rem, 2.5vw, 2rem) 0;
 }
+
+.photo-cascade:first-of-type { padding-top: clamp(2.5rem, 5vw, 4rem); }
+.photo-cascade:last-of-type { padding-bottom: clamp(2.5rem, 5vw, 4rem); }
 
 .photo-cascade-media {
   position: relative;

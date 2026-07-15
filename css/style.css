@@ -25,6 +25,10 @@
   --section-py: clamp(4.5rem, 9vw, 8rem);
 }
 
+/* smooth cross-fade between pages instead of a hard reload flash
+   (progressive enhancement — unsupported browsers get normal loads) */
+@view-transition { navigation: auto; }
+
 * { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; overflow-x: hidden; }
@@ -116,6 +120,9 @@ h1, h2, h3, h4 {
   border-radius: 999px;
   box-shadow: 0 24px 48px -28px rgba(18, 26, 21, 0.35);
   transition: box-shadow 0.5s var(--ease);
+  /* keep the nav bar stable during page transitions instead of
+     fading with the rest of the page — makes it feel like one site */
+  view-transition-name: site-nav;
 }
 
 .site-nav .nav-row {

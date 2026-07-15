@@ -101,6 +101,8 @@
         <label>Message</label>
         <textarea name="message"></textarea>
       </div>
+      <!-- honeypot: hidden from humans; Formspree discards any submission that fills it -->
+      <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
       <button type="submit" class="btn">
         <span class="btn-label">Send Message</span>
         <span class="icon-circle">

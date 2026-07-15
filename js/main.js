@@ -240,6 +240,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  var footer = document.querySelector('.site-footer');
+  if (footer) {
+    footer.textContent = footer.textContent.replace(/\d{4}/, new Date().getFullYear());
+  }
+
   var revealEls = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window && revealEls.length) {
     var observer = new IntersectionObserver(function (entries) {

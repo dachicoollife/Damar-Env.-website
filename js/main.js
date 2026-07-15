@@ -18,10 +18,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  document.querySelectorAll('.nav-overlay a').forEach(function (link) {
-    link.addEventListener('click', function () {
+  // keep the overlay covering the page while the next page loads (closing it
+  // early flashes the old page); close it only when returning via back/forward
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted) {
       document.body.classList.remove('nav-open');
-    });
+    }
   });
 
   var siteNav = document.querySelector('.site-nav');

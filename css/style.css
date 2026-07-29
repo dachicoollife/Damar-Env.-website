@@ -125,6 +125,62 @@ h1, h2, h3, h4 {
   /* keep the nav bar stable during page transitions instead of
      fading with the rest of the page — makes it feel like one site */
   view-transition-name: site-nav;
+  animation: nav-shell-arrive 0.82s var(--ease) both;
+}
+
+/* Page-load choreography: the shell establishes the bar first, then each
+   control resolves in place. Transform and opacity keep the fixed nav crisp. */
+@keyframes nav-shell-arrive {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes nav-mark-arrive {
+  from { opacity: 0; transform: translateY(7px) rotate(-9deg) scale(0.72); }
+  to { opacity: 1; transform: translateY(0) rotate(0) scale(1); }
+}
+
+@keyframes nav-item-arrive {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes nav-wordmark-arrive {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes nav-action-arrive {
+  from { opacity: 0; transform: scale(0.68) rotate(-18deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+@keyframes nav-pill-fill-arrive {
+  from { opacity: 0; transform: scaleX(0.68) scaleY(0.84); }
+  to { opacity: 1; transform: scaleX(1) scaleY(1); }
+}
+
+.brand-logo {
+  animation: nav-mark-arrive 0.68s var(--ease) 0.22s both;
+  transform-origin: 55% 58%;
+}
+
+.brand-text {
+  animation: nav-wordmark-arrive 0.62s var(--ease) 0.30s both;
+}
+
+.main-nav > li:not(.nav-pill) > a {
+  animation: nav-item-arrive 0.62s var(--ease) both;
+}
+
+.main-nav > li:nth-child(1) > a { animation-delay: 0.34s; }
+.main-nav > li:nth-child(2) > a { animation-delay: 0.40s; }
+.main-nav > li:nth-child(3) > a { animation-delay: 0.46s; }
+.main-nav > li:nth-child(4) > a { animation-delay: 0.52s; }
+
+.nav-actions {
+  animation: nav-action-arrive 0.7s var(--ease) 0.58s both;
+  transform-origin: center;
 }
 
 .site-nav .nav-row {
@@ -371,9 +427,18 @@ h1, h2, h3, h4 {
   left: 0;
   z-index: 0;
   border-radius: 999px;
-  background: var(--green-dark);
   pointer-events: none;
   transition: transform 0.5s var(--ease), width 0.5s var(--ease), height 0.5s var(--ease);
+}
+
+.nav-pill::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--green-dark);
+  transform-origin: center;
+  animation: nav-pill-fill-arrive 0.65s var(--ease) 0.36s both;
 }
 
 .nav-pill.no-anim { transition: none; }
@@ -489,6 +554,18 @@ body.nav-open .nav-overlay li:nth-child(4) a { transition-delay: 0.26s; }
 @media (max-width: 860px) {
   .main-nav, .nav-actions .icon-btn.search-btn, .nav-search-wrap { display: none; }
   .nav-toggle { display: block; width: 2.4rem; height: 2.4rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-nav,
+  .brand-logo,
+  .brand-text,
+  .main-nav > li > a,
+  .nav-actions,
+  .nav-pill,
+  .nav-pill::before {
+    animation: none;
+  }
 }
 
 /* ---------- buttons ---------- */

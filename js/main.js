@@ -11,14 +11,19 @@ function skipMobileTransition(e) {
 window.addEventListener('pageswap', skipMobileTransition);
 window.addEventListener('pagereveal', skipMobileTransition);
 
-// clicking a link to another page on this site: tell the next page to keep
-// the top bar static (read by the inline script in each page's <head>).
-// Works on file:// too, where browsers send no referrer.
+// going to another page on this site: tell the next page to keep the top
+// bar static (read by the inline script in each page's <head>). Works on
+// file:// too, where browsers send no referrer. Link clicks are caught
+// below; script-driven navigation (search) calls markNavStatic itself.
+function markNavStatic() {
+  try { sessionStorage.setItem('navStatic', '1'); } catch (err) {}
+}
+
 document.addEventListener('click', function (e) {
   var link = e.target.closest && e.target.closest('a[href]');
   if (link && link.protocol === location.protocol && link.host === location.host &&
       link.pathname !== location.pathname) {
-    try { sessionStorage.setItem('navStatic', '1'); } catch (err) {}
+    markNavStatic();
   }
 });
 
@@ -72,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function goToSearch(query) {
     var q = (query || '').trim();
     if (!q) return;
+    markNavStatic();
     window.location.href = searchPrefix + 'search-results/index.html?q=' + encodeURIComponent(q);
   }
 

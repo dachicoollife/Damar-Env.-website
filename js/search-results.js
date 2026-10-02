@@ -7,8 +7,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var arrowSvg = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg>';
 
+  // on first load the banner (eyebrow, title, bar, meta) reveals with
+  // delays up to 0.24s, so results start just after it; later re-renders
+  // (typing, chips) start immediately
+  var firstRender = true;
+
   function playReveal(container) {
     var els = container.querySelectorAll('.reveal');
+    var base = firstRender ? 0.3 : 0;
+    firstRender = false;
+    els.forEach(function (el, i) {
+      var delay = base + Math.min(i * 0.07, 0.42);
+      el.style.setProperty('--reveal-delay', delay + 's');
+      el.addEventListener('transitionend', function onEnd(e) {
+        if (e.target !== el || e.propertyName !== 'opacity') return;
+        el.classList.add('settled');
+        el.removeEventListener('transitionend', onEnd);
+      });
+    });
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
         els.forEach(function (el) { el.classList.add('is-visible'); });
@@ -48,10 +64,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     var terms = query.toLowerCase().split(/\s+/).filter(Boolean);
-    listEl.innerHTML = results.map(function (r, i) {
+    listEl.innerHTML = results.map(function (r) {
       var item = r.item;
-      var delay = Math.min(i * 0.07, 0.42);
-      return '<a class="bezel result-card reveal" style="transition-delay:' + delay + 's" href="' + item.url + '" target="_blank" rel="noopener">' +
+      return '<a class="bezel result-card reveal" href="' + item.url + '" target="_blank" rel="noopener">' +
         '<div class="bezel-inner">' +
           '<div class="result-tags">' +
             '<span class="result-tag accent">' + core.escapeHtml(item.category) + '</span>' +

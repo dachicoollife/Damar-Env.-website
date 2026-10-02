@@ -1,4 +1,14 @@
-@import url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=general-sans@400,500,600&display=optional');
+/* Fonts (Fontshare: Clash Display + General Sans), declared here directly instead of
+   @import-ing their CSS so the browser finds the files sooner. font-display: block
+   avoids flashing the fallback font on each page load; the top-bar faces are also
+   preloaded in every page's <head>. */
+@font-face { font-family: 'Clash Display'; src: url('https://cdn.fontshare.com/wf/VFMK2COV3DN37JR7JQ4CAOJPZ7KWKNY7/ODD5YJNDLHZZB2MIT3DPVH4EIHAMZ34D/BSY64LPTT3OPLVKAZKL3AHKRWZ3D74AC.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: block; }
+@font-face { font-family: 'Clash Display'; src: url('https://cdn.fontshare.com/wf/2GQIT54GKQY3JRFTSHS4ARTRNRQISSAA/3CIP5EBHRRHE5FVQU3VFROPUERNDSTDF/JTSL5QESUXATU47LCPUNHZQBDDIWDOSW.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+@font-face { font-family: 'Clash Display'; src: url('https://cdn.fontshare.com/wf/FPDAZ2S6SW4QMSRIIKNNGTPM6VIXYMKO/5HNPQ453FRLIQWV2FNOBUU3FKTDZQVSG/Z3MGHFHX6DCTLQ55LJYRJ5MDCZPMFZU6.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: block; }
+@font-face { font-family: 'Clash Display'; src: url('https://cdn.fontshare.com/wf/BFBSY7LX5W2U2EROCLVVTQP4VS7S4PC3/IIUX4FGTMD2LK2VWD3RVTAS4SSMUN7B5/53RZKGODFYDW3QHTIL7IPOWTBCSUEZK7.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: block; }
+@font-face { font-family: 'General Sans'; src: url('https://cdn.fontshare.com/wf/MFQT7HFGCR2L5ULQTW6YXYZXXHMPKLJ3/YWQ244D6TACUX5JBKATPOW5I5MGJ3G73/7YY3ZAAE3TRV2LANYOLXNHTPHLXVWTKH.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: block; }
+@font-face { font-family: 'General Sans'; src: url('https://cdn.fontshare.com/wf/3RZHWSNONLLWJK3RLPEKUZOMM56GO4LJ/BPDRY7AHVI3MCDXXVXTQQ76H3UXA63S3/SB2OEB6IKZPRR6JT4GFJ2TFT6HBB6AZN.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+@font-face { font-family: 'General Sans'; src: url('https://cdn.fontshare.com/wf/K46YRH762FH3QJ25IQM3VAXAKCHEXXW4/ISLWQPUZHZF33LRIOTBMFOJL57GBGQ4B/3ZLMEXZEQPLTEPMHTQDAUXP5ZZXCZAEN.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: block; }
 
 :root {
   /* brand (kept from original site) */
@@ -31,9 +41,17 @@
    it in some browsers; mobile is opted out via skipTransition in main.js */
 @view-transition { navigation: auto; }
 
+/* the top bar is identical on both pages, so swap it in one frame rather
+   than cross-fading two copies (which makes its text dip and blink) */
+::view-transition-group(site-nav),
+::view-transition-new(site-nav) { animation: none; }
+::view-transition-old(site-nav) { display: none; }
+
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; overflow-x: hidden; }
+/* scrollbar-gutter: always reserve the scrollbar's space, so short pages
+   (contact) don't widen the viewport and nudge the centered top bar sideways */
+html { scroll-behavior: smooth; overflow-x: hidden; scrollbar-gutter: stable; }
 
 body {
   margin: 0;
@@ -421,6 +439,13 @@ h1, h2, h3, h4 {
 
 .main-nav a.pill-target { color: var(--white); }
 
+/* before main.js builds the sliding pill, draw the current page's link as
+   already selected so it doesn't flash grey -> white on page changes; no
+   colour transition until the pill is in place */
+.main-nav:not(.pill-ready) a { transition: none; }
+.main-nav:not(.pill-ready) a.active { color: var(--white); }
+.nav-static .main-nav:not(.pill-ready) a.active { background: var(--green-dark); }
+
 .nav-pill {
   position: absolute;
   top: 0;
@@ -556,6 +581,18 @@ body.nav-open .nav-overlay li:nth-child(4) a { transition-delay: 0.26s; }
   .nav-toggle { display: block; width: 2.4rem; height: 2.4rem; }
 }
 
+/* arriving from another page on the site (class set in each page's <head>):
+   the bar is already there, so it stays put instead of replaying its intro */
+.nav-static .site-nav,
+.nav-static .brand-logo,
+.nav-static .brand-text,
+.nav-static .main-nav > li > a,
+.nav-static .nav-actions,
+.nav-static .nav-pill,
+.nav-static .nav-pill::before {
+  animation: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .site-nav,
   .brand-logo,
@@ -652,7 +689,7 @@ body.nav-open .nav-overlay li:nth-child(4) a { transition-delay: 0.26s; }
   background: var(--green-deep);
   color: rgba(255,255,255,0.7);
   text-align: center;
-  padding: 2.2rem 1rem;
+  padding: 1rem 1rem;
   font-size: 0.78rem;
   letter-spacing: 0.02em;
   margin-top: auto;
@@ -1066,6 +1103,18 @@ body.nav-open .nav-overlay li:nth-child(4) a { transition-delay: 0.26s; }
 }
 
 .result-card:hover { transform: translateY(-3px); }
+
+/* while revealing, cards use the same fade/rise/unblur as every other
+   .reveal (the hover transition above would otherwise override it), staggered
+   by --reveal-delay; once settled (class added by search-results.js) they
+   switch back to the quick, undelayed hover lift */
+.search-results-list > .reveal {
+  transition:
+    opacity 1s var(--ease-soft) var(--reveal-delay, 0s),
+    transform 1s var(--ease-soft) var(--reveal-delay, 0s),
+    filter 1s var(--ease-soft) var(--reveal-delay, 0s);
+}
+.result-card.reveal.settled { transition: transform 0.5s var(--ease); }
 
 .result-card .bezel-inner { padding: 1.8rem 2rem; transition: box-shadow 0.5s var(--ease); }
 

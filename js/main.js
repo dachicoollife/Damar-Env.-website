@@ -11,6 +11,17 @@ function skipMobileTransition(e) {
 window.addEventListener('pageswap', skipMobileTransition);
 window.addEventListener('pagereveal', skipMobileTransition);
 
+// clicking a link to another page on this site: tell the next page to keep
+// the top bar static (read by the inline script in each page's <head>).
+// Works on file:// too, where browsers send no referrer.
+document.addEventListener('click', function (e) {
+  var link = e.target.closest && e.target.closest('a[href]');
+  if (link && link.protocol === location.protocol && link.host === location.host &&
+      link.pathname !== location.pathname) {
+    try { sessionStorage.setItem('navStatic', '1'); } catch (err) {}
+  }
+});
+
 document.addEventListener('DOMContentLoaded', function () {
   var toggle = document.querySelector('.nav-toggle');
   if (toggle) {
@@ -198,14 +209,23 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     placeInstantly(activeLink);
+    mainNav.classList.add('pill-ready');
 
-    // re-measure once web fonts finish loading — text metrics change and the
-    // links shift, leaving the pill at stale fallback-font coordinates
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(function () {
-        var current = mainNav.querySelector('a.pill-target') || activeLink;
-        placeInstantly(current);
-      });
+    // re-measure whenever the links change size (e.g. the web font arriving
+    // after first paint) — otherwise the pill sits at stale coordinates and
+    // visibly slides into place on the next hover. fonts.ready alone misses
+    // this: it can resolve before the font files have even started loading.
+    var resync = function () {
+      placeInstantly(mainNav.querySelector('a.pill-target') || activeLink);
+    };
+    if (window.ResizeObserver) {
+      var linkObserver = new ResizeObserver(resync);
+      linkObserver.observe(mainNav);
+      navLinks.forEach(function (l) { linkObserver.observe(l); });
+    }
+    if (document.fonts) {
+      if (document.fonts.ready) document.fonts.ready.then(resync);
+      document.fonts.addEventListener && document.fonts.addEventListener('loadingdone', resync);
     }
 
     navLinks.forEach(function (link) {

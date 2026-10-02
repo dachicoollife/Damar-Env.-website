@@ -1300,6 +1300,38 @@ body.nav-open .nav-overlay-search { transform: translateY(0); opacity: 1; transi
 
 .field textarea { min-height: 130px; resize: vertical; }
 
+/* inline validation (contact-form.js), replacing the browser's bubble */
+.field.has-error input, .field.has-error textarea { border-color: rgba(179, 38, 30, 0.5); }
+.field.has-error input:focus, .field.has-error textarea:focus {
+  border-color: #b3261e;
+  box-shadow: 0 0 0 4px rgba(179, 38, 30, 0.08);
+}
+
+.field-error {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0.45rem 0 0 0.25rem;
+  font-size: 0.76rem;
+  letter-spacing: 0.01em;
+  color: #b3261e;
+  animation: field-error-in 0.3s var(--ease) both;
+}
+
+.field-error::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+@keyframes field-error-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
 .btn:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; transform: none; }
 .btn:disabled .icon-circle { transform: none; }
 

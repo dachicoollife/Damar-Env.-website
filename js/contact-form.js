@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
     e.preventDefault();
 
     if (FORMSPREE_ENDPOINT.indexOf('YOUR_FORM_ID') !== -1) {
-      setStatus('Form is not connected yet — add your Formspree endpoint in js/contact-form.js.', 'error');
+      setStatus('Form is not connected yet. Add your Formspree endpoint in js/contact-form.js.', 'error');
       return;
     }
 
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }).then(function (response) {
       if (response.ok) {
         form.reset();
-        setStatus("Thanks for reaching out — we'll be in touch soon.", 'success');
+        setStatus("Thanks for reaching out. We'll be in touch soon.", 'success');
       } else {
         return response.json().then(function (data) {
           var message = (data && data.errors && data.errors.length)

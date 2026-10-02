@@ -1,6 +1,6 @@
 window.REGULATORY_INDEX = [
   {
-    title: "New York City Department of Environmental Protection — Asbestos Control Program Rules and Regulations",
+    title: "New York City Department of Environmental Protection: Asbestos Control Program Rules and Regulations",
     snippet: "Bureau of Environmental Compliance rules and regulations governing the Asbestos Control Program within New York City.",
     category: "Asbestos",
     jurisdiction: "New York City",

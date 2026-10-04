@@ -27,11 +27,29 @@ document.addEventListener('click', function (e) {
   }
 });
 
+// let the browser handle ctrl/cmd/shift/middle clicks (open in new tab or
+// window) instead of hijacking them into a same-tab navigation
+function isModifiedClick(e) {
+  return e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // no autoplaying hero video for reduced-motion users; the poster stays
+  if (reduceMotion) {
+    document.querySelectorAll('video[autoplay]').forEach(function (video) {
+      video.removeAttribute('autoplay');
+      video.pause();
+    });
+  }
+
   var toggle = document.querySelector('.nav-toggle');
   if (toggle) {
+    toggle.setAttribute('aria-expanded', 'false');
     toggle.addEventListener('click', function () {
-      document.body.classList.toggle('nav-open');
+      var open = document.body.classList.toggle('nav-open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
   }
 
@@ -40,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('pageshow', function (e) {
     if (e.persisted) {
       document.body.classList.remove('nav-open');
+      if (toggle) toggle.setAttribute('aria-expanded', 'false');
     }
   });
 
@@ -51,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
     searchBtn.addEventListener('click', function (e) {
       e.stopPropagation();
       var isActive = siteNav.classList.toggle('search-active');
+      searchBtn.setAttribute('aria-expanded', isActive ? 'true' : 'false');
       if (isActive && searchInput) {
         setTimeout(function () { searchInput.focus(); }, 350);
       } else if (searchInput) {
@@ -61,12 +81,14 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('click', function (e) {
       if (siteNav.classList.contains('search-active') && !siteNav.contains(e.target)) {
         siteNav.classList.remove('search-active');
+        searchBtn.setAttribute('aria-expanded', 'false');
       }
     });
 
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
         siteNav.classList.remove('search-active');
+        searchBtn.setAttribute('aria-expanded', 'false');
       }
     });
   }
@@ -190,9 +212,12 @@ document.addEventListener('DOMContentLoaded', function () {
     mainNav.appendChild(pill);
 
     var navLinks = Array.prototype.slice.call(mainNav.querySelectorAll('a'));
-    var activeLink = mainNav.querySelector('a.active') || navLinks[0];
+    // pages outside the main nav (search results, 404) have no active link:
+    // the pill then stays hidden until a link is hovered
+    var activeLink = mainNav.querySelector('a.active');
 
     var movePill = function (el) {
+      pill.classList.toggle('is-hidden', !el);
       if (!el) return;
       var navBox = mainNav.getBoundingClientRect();
       var elBox = el.getBoundingClientRect();
@@ -236,12 +261,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     navLinks.forEach(function (link) {
       link.addEventListener('mouseenter', function () {
-        movePill(link);
+        // coming from hidden: appear on the link instead of sliding from 0,0
+        if (pill.classList.contains('is-hidden')) placeInstantly(link);
+        else movePill(link);
         setTarget(link);
       });
 
       link.addEventListener('click', function (e) {
-        if (link.classList.contains('active')) return;
+        if (link.classList.contains('active') || isModifiedClick(e)) return;
         var href = link.getAttribute('href');
         if (!href) return;
         e.preventDefault();
@@ -269,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function () {
       document.querySelectorAll('a.btn[href*="contact"]').forEach(function (btn) {
         if (mainNav.contains(btn)) return;
         btn.addEventListener('click', function (e) {
-          if (contactNavLink.classList.contains('active')) return;
+          if (contactNavLink.classList.contains('active') || isModifiedClick(e)) return;
           var href = btn.getAttribute('href');
           if (!href) return;
           e.preventDefault();

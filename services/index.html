@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <script>/* arriving from another page on this site (flag set in main.js): keep the top bar static, skip its intro */try{if(sessionStorage.getItem('navStatic')){sessionStorage.removeItem('navStatic');document.documentElement.classList.add('nav-static')}}catch(e){}</script>
-<link rel="preload" href="https://cdn.fontshare.com/wf/3RZHWSNONLLWJK3RLPEKUZOMM56GO4LJ/BPDRY7AHVI3MCDXXVXTQQ76H3UXA63S3/SB2OEB6IKZPRR6JT4GFJ2TFT6HBB6AZN.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="https://cdn.fontshare.com/wf/MFQT7HFGCR2L5ULQTW6YXYZXXHMPKLJ3/YWQ244D6TACUX5JBKATPOW5I5MGJ3G73/7YY3ZAAE3TRV2LANYOLXNHTPHLXVWTKH.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="https://cdn.fontshare.com/wf/FPDAZ2S6SW4QMSRIIKNNGTPM6VIXYMKO/5HNPQ453FRLIQWV2FNOBUU3FKTDZQVSG/Z3MGHFHX6DCTLQ55LJYRJ5MDCZPMFZU6.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/general-sans-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/general-sans-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/clash-display-600.woff2" as="font" type="font/woff2" crossorigin>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Services | Damar Environmental</title>
 <meta name="description" content="Asbestos abatement monitoring, asbestos management and testing, variance filing, lead-based paint testing, and mold and indoor air quality testing from Damar Environmental.">
@@ -20,6 +20,7 @@
 <meta property="og:site_name" content="Damar Environmental">
 <meta property="og:title" content="Services | Damar Environmental">
 <meta property="og:description" content="Asbestos abatement monitoring, asbestos management and testing, variance filing, lead-based paint testing, and mold and indoor air quality testing from Damar Environmental.">
+<link rel="canonical" href="https://damarenv.com/services/">
 <meta property="og:url" content="https://damarenv.com/services/">
 <meta property="og:image" content="https://damarenv.com/images/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -30,6 +31,7 @@
 <meta name="twitter:image" content="https://damarenv.com/images/og-image.png">
 
 <link rel="stylesheet" href="../css/style.css">
+<noscript><style>.reveal{opacity:1;transform:none;filter:none}</style></noscript>
 </head>
 <body>
 <div class="grain"></div>
@@ -50,17 +52,17 @@
       <li><a href="../contact/index.html">Contact</a></li>
     </ul>
     <div class="nav-actions">
-      <button class="icon-btn search-btn" aria-label="Search" type="button">
+      <button class="icon-btn search-btn" aria-label="Search" aria-expanded="false" type="button">
         <svg class="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
         <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
-      <button class="icon-btn nav-toggle" aria-label="Menu">
+      <button class="icon-btn nav-toggle" aria-label="Menu" aria-expanded="false" type="button">
         <span></span><span></span><span></span>
       </button>
     </div>
     <div class="nav-search-wrap">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-      <input type="search" class="nav-search-input" placeholder="Search the regulations...">
+      <input type="search" class="nav-search-input" aria-label="Search the regulations" placeholder="Search the regulations...">
     </div>
   </div>
 </nav>
@@ -68,7 +70,7 @@
 <div class="nav-overlay">
   <div class="nav-overlay-search">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-    <input type="search" class="overlay-search-input" placeholder="Search the regulations...">
+    <input type="search" class="overlay-search-input" aria-label="Search the regulations" placeholder="Search the regulations...">
   </div>
   <ul>
     <li><a href="../index.html">Home</a></li>
